@@ -7,17 +7,17 @@ function App() {
   const [movies, setMovies] = useState([])
 
   async function fetchMovieHandler() {
-    fetch('https://swapi.dev/api/films')
-      .then(res => res.json())
-      .then(movies => {
-        const newMoviesArray = movies.results.map(movie => ({
-          id: movie.episode_id,
-          title: movie.title,
-          releaseDate: movie.release_date,
-          openingText: movie.opening_crawl
-        }))
-        setMovies(newMoviesArray)
-      })
+    const response = await fetch('https://swapi.dev/api/films')
+    const data = await response.json()
+
+    const moviesArray = data.results.map(movie => ({
+      id: movie.episode_id,
+      title: movie.title,
+      releaseDate: movie.release_date,
+      openingText: movie.opening_crawl
+    }))
+
+    setMovies(moviesArray)
   }
 
   return (
