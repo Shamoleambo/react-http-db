@@ -20,13 +20,16 @@ function App() {
       if (!response.ok) throw new Error('Something went wrong.')
 
       const data = await response.json()
+      let moviesArray = []
 
-      const moviesArray = data.results.map(movie => ({
-        id: movie.episode_id,
-        title: movie.title,
-        releaseDate: movie.release_date,
-        openingText: movie.opening_crawl
-      }))
+      for (let key in data) {
+        moviesArray.push({
+          id: key,
+          title: data[key].title,
+          openingText: data[key].openingText,
+          releaseDate: data[key].releaseDate
+        })
+      }
 
       setMovies(moviesArray)
     } catch (error) {
@@ -36,8 +39,18 @@ function App() {
     setIsLoading(false)
   }, [])
 
-  function addMovieHandler(movie) {
-    console.log(movie)
+  async function addMovieHandler(movie) {
+    const response = await fetch(
+      'https://react-academind-3054e-default-rtdb.firebaseio.com/movies.json',
+      {
+        method: 'POST',
+        body: JSON.stringify(movie),
+        headers: { 'Content-Type': 'application/josn' }
+      }
+    )
+
+    const data = await response.json()
+    console.log(data)
   }
 
   useEffect(() => {
